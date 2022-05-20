@@ -123,15 +123,14 @@ int main()
     std::vector<double> x02 = { 10000, 5000, -10000 };
     std::vector<std::vector<double>> glissade = tr.getGlissade(3000, 2);
 
-    Aircraft* a1 = new Aircraft(x01, 200, 0);
-    //Aircraft* a2 = new Aircraft(x02, 200, -2.9);
+    Aircraft* a1 = new Aircraft(x01, 200, 0, 1);
+    //Aircraft* a2 = new Aircraft(x02, 200, -2.9, 2);
     std::vector<Aircraft*> A;
     A.push_back(a1);
     //A.push_back(a2);
     ORM Orm(A);
 
-    //a1.ins.bindPort(_s, _destAddr);
-    //a1.sns.bindPort(_s, _destAddr);
+    a1->bindPort(_s, _destAddr);
 
 
     timer.add(std::chrono::microseconds(10), [&]() {test_run(*a1); });

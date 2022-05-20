@@ -513,7 +513,7 @@ void Transition::WriteFile(std::ofstream& file1, int flag, std::vector<double> v
 	}
 }
 
-void Transition::fillFile(std::ofstream& file1, const char* filenamef, int flag, std::vector<double> vec, long countOperation, int index, double PPMs_size)
+void Transition::fillFile(std::ofstream& file1, std::string filenamef, int flag, std::vector<double> vec, long countOperation, int index, double PPMs_size)
 {
 	if (flag == 1)
 	{

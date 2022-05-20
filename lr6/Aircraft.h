@@ -10,8 +10,7 @@
 #include <list>
 #include "integrator.h";	
 #include <string>
-
-
+#include <sstream>
 
 class Aircraft {
 private:
@@ -19,6 +18,7 @@ private:
 	Transition tr;
 	std::mutex mutex;
 	std::ofstream file1;
+	std::stringstream ss;
 	const double PI = 3.141592653589793;
 	double roll, pitch, yaw;		// крен тангаж рысканье
 	double longitude, latitude;		// долгота широта
@@ -30,6 +30,9 @@ private:
 	std::vector <ASP> bombs = {};
 	int curIndexBomb = 0;
 	int curRoundIndex = -1;
+
+	SOCKET _s;
+	sockaddr_in _destAddr;
 
 	bool END = false;
 	//std::list <ASP> bombs;
@@ -55,12 +58,14 @@ public:
 	INS ins;
 	SNS sns;
 
+	std::string filenamef;
+
 	std::vector <double> startSK = { 0,10000,0 }; //
 	bool islanding = false; //
 	bool islanded = false; //
 
 	Aircraft();
-	Aircraft(std::vector<double> x0, double V0, double A0);
+	Aircraft(std::vector<double> x0, double V0, double A0, int number);
 	Aircraft(double longitude, double latitude, double V0, double A0);
 
 	void run3();
@@ -73,4 +78,6 @@ public:
 	void calculateEllisp(std::vector<double> x0, std::vector<std::vector<double>> glissade);
 	void initRound();
 	int setPPMs(int indexCur);
+	int bindPort(SOCKET s, sockaddr_in destAddr);
+	void sendMsg(std::vector<double> vec);
 };

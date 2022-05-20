@@ -77,7 +77,7 @@ Aircraft::Aircraft(double longitude, double latitude, double V0, double A0) {
 	tr.fillFile(file1, "123.kml", 1, std::vector<double> {0, 0, 0}, countOperation, index, PPMs.size());
 }
 
-Aircraft::Aircraft(std::vector<double> x0, double V0, double A0)
+Aircraft::Aircraft(std::vector<double> x0, double V0, double A0, int number)
 {
 	this->startSK = x0;
 	this->V = V0;
@@ -89,7 +89,10 @@ Aircraft::Aircraft(std::vector<double> x0, double V0, double A0)
 	this->initRound();
 	this->curRoundIndex = this->setPPMs(-1);
 
-	tr.fillFile(file1, "123.kml", 1, std::vector<double> {0, 0, 0}, countOperation, index, PPMs.size());
+	ss << "Plane" << number << ".kml";
+	filenamef = ss.str();
+
+	tr.fillFile(file1, filenamef, 1, std::vector<double> {0, 0, 0}, countOperation, index, PPMs.size());
 }
 
 Aircraft::Aircraft()
@@ -156,6 +159,8 @@ void  Aircraft::run3()
 		latitude = coordinatesG[0];
 		longitude = coordinatesG[1];
 
+		sendMsg(startSK);
+
 		if (tr.getDistance(std::vector<double> {startSK[0], startSK[2]}, std::vector<double>{PPMs[index][0], PPMs[index][2]}) < 200)
 		{
 			index += 1;
@@ -172,7 +177,7 @@ void  Aircraft::run3()
 		mutex.unlock();
 	}
 
-	tr.fillFile(file1, "123.kml", 2, std::vector<double> {latitude, longitude, startSK[1]}, countOperation, index, PPMs.size());
+	tr.fillFile(file1, filenamef, 2, std::vector<double> {latitude, longitude, startSK[1]}, countOperation, index, PPMs.size());
 	if (index == PPMs.size())
 	{
 		this->islanding = false;
@@ -463,4 +468,29 @@ void Aircraft::fillINS(std::vector<double> vec)
 	ins.VelocityNS.value = vec[5];
 	ins.VelocityEW.value = vec[6];
 	ins.mutex.unlock();
+}
+
+int Aircraft::bindPort(SOCKET s, sockaddr_in destAddr) {
+	_s = s;
+	_destAddr = destAddr;
+	return 1;
+}
+
+void Aircraft::sendMsg(std::vector<double> vector)
+{
+	char* buffer;
+	std::string msg = std::to_string(vector[0]);
+	msg.append(" ");
+	msg.append(std::to_string(vector[1]));
+	msg.append(" ");
+	msg.append(std::to_string(vector[2]));
+	buffer = new char[sizeof(msg)];
+	memset(buffer, 0, sizeof(msg));
+	memcpy(buffer, &msg, sizeof(msg));
+	char s = *buffer;
+	//sendto(_s, &buffer[0], sizeof(buffer), 0,
+	//	(sockaddr*)&_destAddr, sizeof(_destAddr));
+
+	int n_bytes = ::sendto(_s, msg.c_str(), msg.length(), 0, reinterpret_cast<sockaddr*>(&_destAddr), sizeof(_destAddr));
+	std::cout << n_bytes << " bytes sent" << std::endl;
 }
