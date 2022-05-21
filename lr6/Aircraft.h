@@ -30,6 +30,7 @@ private:
 	std::vector <ASP> bombs = {};
 	int curIndexBomb = 0;
 	int curRoundIndex = -1;
+	int indexLA;   //Индекс для передачи пакета UDP
 
 	SOCKET _s;
 	sockaddr_in _destAddr;

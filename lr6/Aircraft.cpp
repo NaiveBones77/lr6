@@ -93,7 +93,7 @@ Aircraft::Aircraft(std::vector<double> x0, double V0, double A0, int number)
 	ort[0] = (distSP[0] - startSK[0]) / tr.getDistance(distSP, startSK);
 	ort[1] = (distSP[1] - startSK[1]) / tr.getDistance(distSP, startSK);
 	this-> A = tr.getAngleFromScalars(ort, std::vector<double> {PPMs[index][0] - startSK[0], PPMs[index][2] - startSK[2]});
-
+	indexLA = number;
 	ss << "Plane" << number << ".kml";
 	filenamef = ss.str();
 
@@ -185,6 +185,7 @@ void  Aircraft::run3()
 	tr.fillFile(file1, filenamef, 2, std::vector<double> {latitude, longitude, startSK[1]}, countOperation, index, PPMs.size());
 	if (index == PPMs.size())
 	{
+		sendMsg(startSK, 50);
 		this->islanding = false;
 		this->islanded = true;
 		index = 1000;
@@ -491,6 +492,8 @@ void Aircraft::sendMsg(std::vector<double> vector, int count)
 		msg.append(std::to_string(vector[1]));
 		msg.append(" ");
 		msg.append(std::to_string(vector[2]));
+		msg.append(" ");
+		msg.append(std::to_string(this->indexLA));
 		buffer = new char[sizeof(msg)];
 		memset(buffer, 0, sizeof(msg));
 		memcpy(buffer, &msg, sizeof(msg));
