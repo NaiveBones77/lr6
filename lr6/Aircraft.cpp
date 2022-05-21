@@ -89,6 +89,11 @@ Aircraft::Aircraft(std::vector<double> x0, double V0, double A0, int number)
 	this->initRound();
 	this->curRoundIndex = this->setPPMs(-1);
 
+	std::vector<double> ort = { 0, 0 };
+	ort[0] = (distSP[0] - startSK[0]) / tr.getDistance(distSP, startSK);
+	ort[1] = (distSP[1] - startSK[1]) / tr.getDistance(distSP, startSK);
+	this-> A = tr.getAngleFromScalars(ort, std::vector<double> {PPMs[index][0] - startSK[0], PPMs[index][2] - startSK[2]});
+
 	ss << "Plane" << number << ".kml";
 	filenamef = ss.str();
 
