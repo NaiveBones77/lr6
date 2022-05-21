@@ -79,5 +79,5 @@ public:
 	void initRound();
 	int setPPMs(int indexCur);
 	int bindPort(SOCKET s, sockaddr_in destAddr);
-	void sendMsg(std::vector<double> vec);
+	void sendMsg(std::vector<double> vec, int countOP);
 };

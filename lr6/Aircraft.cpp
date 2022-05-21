@@ -159,7 +159,7 @@ void  Aircraft::run3()
 		latitude = coordinatesG[0];
 		longitude = coordinatesG[1];
 
-		sendMsg(startSK);
+		sendMsg(startSK, countOperation);
 
 		if (tr.getDistance(std::vector<double> {startSK[0], startSK[2]}, std::vector<double>{PPMs[index][0], PPMs[index][2]}) < 200)
 		{
@@ -476,21 +476,25 @@ int Aircraft::bindPort(SOCKET s, sockaddr_in destAddr) {
 	return 1;
 }
 
-void Aircraft::sendMsg(std::vector<double> vector)
+void Aircraft::sendMsg(std::vector<double> vector, int count)
 {
-	char* buffer;
-	std::string msg = std::to_string(vector[0]);
-	msg.append(" ");
-	msg.append(std::to_string(vector[1]));
-	msg.append(" ");
-	msg.append(std::to_string(vector[2]));
-	buffer = new char[sizeof(msg)];
-	memset(buffer, 0, sizeof(msg));
-	memcpy(buffer, &msg, sizeof(msg));
-	char s = *buffer;
-	//sendto(_s, &buffer[0], sizeof(buffer), 0,
-	//	(sockaddr*)&_destAddr, sizeof(_destAddr));
+	if (count % 50 == 0)
+	{
+		char* buffer;
+		std::string msg = std::to_string(vector[0]);
+		msg.append(" ");
+		msg.append(std::to_string(vector[1]));
+		msg.append(" ");
+		msg.append(std::to_string(vector[2]));
+		buffer = new char[sizeof(msg)];
+		memset(buffer, 0, sizeof(msg));
+		memcpy(buffer, &msg, sizeof(msg));
+		char s = *buffer;
+		//sendto(_s, &buffer[0], sizeof(buffer), 0,
+		//	(sockaddr*)&_destAddr, sizeof(_destAddr));
 
-	int n_bytes = ::sendto(_s, msg.c_str(), msg.length(), 0, reinterpret_cast<sockaddr*>(&_destAddr), sizeof(_destAddr));
-	std::cout << n_bytes << " bytes sent" << std::endl;
+		int n_bytes = ::sendto(_s, msg.c_str(), msg.length(), 0, reinterpret_cast<sockaddr*>(&_destAddr), sizeof(_destAddr));
+		//std::cout << n_bytes << " bytes sent" << std::endl;
+	}
+	
 }
