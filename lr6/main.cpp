@@ -29,6 +29,12 @@ void test_check(ORM& A)
     A.checkAircrafts();
 }
 
+void test_zones(ORM& A)
+{
+    A.checkZones();
+}
+
+
 void test_ops(Aircraft& a)
 {
     a.OPS2();
@@ -119,28 +125,43 @@ int main()
 
     Transition tr;
 
-    std::vector<double> x01 = { -10000, 5000, 7000};
-    std::vector<double> x02 = { -10000, 4000, 7000 };
-    std::vector<double> x03 = { -10000, 6000, 7000 };
-    std::vector<double> x04 = { -10000, 4000, 7000 };
-    std::vector<double> x05 = { -10000, 4000, 7000 };
-    std::vector<double> x06 = { -10000, 4000, 7000 };
-    std::vector<double> x07 = { -10000, 4000, 7000 };
-    std::vector<double> x08 = { -10000, 4000, 7000 };
+    std::vector<double> x01 = { -10000, 5000, 7000 };
+    std::vector<double> x02 = { -12204, 5000, -206 };
+    std::vector<double> x03 = { -10000, 6000, 15000 };
+    std::vector<double> x04 = { -8000, 3000, 9000 };
+    std::vector<double> x05 = { 6000, 4000, 14000 };
+    std::vector<double> x06 = { -10000, 5000, 10000 };
+    std::vector<double> x07 = { 13000, 6000, 11000 };
+    std::vector<double> x08 = { 12000, 7000, 10000 };
     std::vector<std::vector<double>> glissade = tr.getGlissade(3000, 2);
 
     Aircraft* a1 = new Aircraft(x01, 200, 0, 1);
-    Aircraft* a2 = new Aircraft(x02, 200, -2.9, 2);
-    Aircraft* a3 = new Aircraft(x03, 200, -2.9, 3);
+    Aircraft* a2 = new Aircraft(x02, 400, 0, 2);
+    Aircraft* a3 = new Aircraft(x03, 240, 0, 3);
+    Aircraft* a4 = new Aircraft(x04, 250, 0, 4);
+    Aircraft* a5 = new Aircraft(x05, 240, 0, 5);
+    Aircraft* a6 = new Aircraft(x06, 230, 0, 6);
+    Aircraft* a7 = new Aircraft(x07, 220, 0, 7);
+    Aircraft* a8 = new Aircraft(x08, 200, 0, 8);
     std::vector<Aircraft*> A;
     A.push_back(a1);
     A.push_back(a2);
     A.push_back(a3);
+    A.push_back(a4);
+    A.push_back(a5);
+    A.push_back(a6);
+    A.push_back(a7);
+    A.push_back(a8);
     ORM Orm(A);
 
     a1->bindPort(_s, _destAddr);
     a2->bindPort(_s, _destAddr);
     a3->bindPort(_s, _destAddr);
+    a4->bindPort(_s, _destAddr);
+    a5->bindPort(_s, _destAddr);
+    a6->bindPort(_s, _destAddr);
+    a7->bindPort(_s, _destAddr);
+    a8->bindPort(_s, _destAddr);
 
 
     timer.add(std::chrono::microseconds(100), [&]() {test_run(*a1); });
@@ -152,7 +173,23 @@ int main()
     timer.add(std::chrono::microseconds(100), [&]() {test_run(*a3); });
     timer.add(std::chrono::microseconds(100), [&]() {test_ops(*a3); });
 
-    timer.add(std::chrono::microseconds(1000), [&]() {test_check(Orm); });
+    timer.add(std::chrono::microseconds(100), [&]() {test_run(*a4); });
+    timer.add(std::chrono::microseconds(100), [&]() {test_ops(*a4); });
+
+    timer.add(std::chrono::microseconds(100), [&]() {test_run(*a5); });
+    timer.add(std::chrono::microseconds(100), [&]() {test_ops(*a5); });
+
+    timer.add(std::chrono::microseconds(100), [&]() {test_run(*a6); });
+    timer.add(std::chrono::microseconds(100), [&]() {test_ops(*a6); });
+
+    timer.add(std::chrono::microseconds(100), [&]() {test_run(*a7); });
+    timer.add(std::chrono::microseconds(100), [&]() {test_ops(*a7); });
+
+    timer.add(std::chrono::microseconds(100), [&]() {test_run(*a8); });
+    timer.add(std::chrono::microseconds(100), [&]() {test_ops(*a8); });
+
+    timer.add(std::chrono::microseconds(10), [&]() {test_check(Orm); });
+    timer.add(std::chrono::microseconds(10), [&]() {test_zones(Orm); });
 
     // timer.add(std::chrono::microseconds(1500), [&]() {test_bomb(a1); });
 

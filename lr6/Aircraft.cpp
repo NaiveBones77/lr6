@@ -185,7 +185,7 @@ void  Aircraft::run3()
 		mutex.unlock();
 	}
 
-	tr.fillFile(file1, filenamef, 2, std::vector<double> {latitude, longitude, startSK[1]}, countOperation, index, PPMs.size());
+	//tr.fillFile(file1, filenamef, 2, std::vector<double> {latitude, longitude, startSK[1]}, countOperation, index, PPMs.size());
 	if (index == PPMs.size())
 	{
 		sendMsg(startSK, 50);
@@ -321,6 +321,7 @@ void Aircraft::calculateEllisp(std::vector<double> x0, std::vector<std::vector<d
 
 void Aircraft::initRound()
 {
+	mutex.lock();
 	double r = tr.getDistance(std::vector<double> {startSK[0], startSK[2]}, std::vector<double> {0, 0});  //радиус окружности
 	double l = 2 * 3.14 * r;
 	double dist = 2000;
@@ -341,11 +342,12 @@ void Aircraft::initRound()
 		PPMsRound.insert(PPMsRound.end(), point);
 		x -= dist;
 	}
-
+	mutex.unlock();
 }
 
 void Aircraft::initRound(double R, double verticalShift)
 {
+	mutex.lock();
 	PPMsRound.clear();
 	
 	if (R == 0)
@@ -373,6 +375,7 @@ void Aircraft::initRound(double R, double verticalShift)
 	}
 	PPMs.clear();
 	setPPMs(-1);
+	mutex.unlock();
 }
 
 

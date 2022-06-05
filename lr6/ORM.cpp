@@ -48,13 +48,13 @@ void ORM::checkAircrafts()
 		}
 	}
 
-	checkZones();
 
 	
 }
 
 void ORM::checkZones()
 {
+	mutex.lock();
 	int n = Aircrafts.size();
 	for (int i = 0; i < n - 1; i++)
 	{
@@ -65,7 +65,6 @@ void ORM::checkZones()
 			{
 				double shift2 = 0;
 				double shift1 = 0;
-				// Проверка 1 самолета
 				if (tableAirs[i][i] == 1)
 				{
 					shift1 = 1000;
@@ -178,4 +177,5 @@ void ORM::checkZones()
 			}
 		}
 	}
+	mutex.unlock();
 }
