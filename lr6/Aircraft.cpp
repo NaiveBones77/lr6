@@ -169,13 +169,16 @@ void  Aircraft::run3()
 		if (tr.getDistance(std::vector<double> {startSK[0], startSK[2]}, std::vector<double>{PPMs[index][0], PPMs[index][2]}) < 200)
 		{
 			index += 1;
+			std::string name;
+			name = "Aircraft: " + this->filenamef + " on circle: ";
 			if (!islanding)
 			{
 				curRoundIndex = setPPMs(curRoundIndex);
-				std::cout << curRoundIndex << std::endl;
+				std::cout << name << curRoundIndex << std::endl;
 			}
 			else {
-				std::cout << index << std::endl;
+				name = "Aircraft: " + this->filenamef + " on landing: ";
+				std::cout << name << index << std::endl;
 			}
 		}
 		countOperation += 1;
@@ -340,6 +343,38 @@ void Aircraft::initRound()
 	}
 
 }
+
+void Aircraft::initRound(double R, double verticalShift)
+{
+	PPMsRound.clear();
+	
+	if (R == 0)
+	{
+		R = tr.getDistance(std::vector<double> {startSK[0], startSK[2]}, std::vector<double> {0, 0});  //радиус окружности
+	}
+	double l = 2 * 3.14 * R;
+	double dist = 2000;
+	int n = int(l / dist);  //количество точек, так что, каждые 2 км добаляем ППМ
+	double x = -R;
+	while (x <= R)
+	{
+		double y = -sqrt(pow(R, 2) - pow(x, 2));
+		std::vector<double> point = { y, startSK[1] + verticalShift, x };
+		PPMsRound.insert(PPMsRound.end(), point);
+		x += dist;
+	}
+	x = R;
+	while (x >= -R)
+	{
+		double y = sqrt(pow(R, 2) - pow(x, 2));
+		std::vector<double> point = { y, startSK[1] + verticalShift, x };
+		PPMsRound.insert(PPMsRound.end(), point);
+		x -= dist;
+	}
+	PPMs.clear();
+	setPPMs(-1);
+}
+
 
 int Aircraft::setPPMs(int indexCur)
 {

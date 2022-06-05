@@ -78,6 +78,7 @@ public:
 	void run_asp(ASP& asp);
 	void calculateEllisp(std::vector<double> x0, std::vector<std::vector<double>> glissade);
 	void initRound();
+	void initRound(double R, double verticalShift);
 	int setPPMs(int indexCur);
 	int bindPort(SOCKET s, sockaddr_in destAddr);
 	void sendMsg(std::vector<double> vec, int countOP);

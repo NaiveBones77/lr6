@@ -15,10 +15,12 @@ private:
 	Transition tr;
 	std::vector<Aircraft*> Aircrafts;
 	std::vector <std::vector<double>> gliss = tr.getGlissade(3000, 2);
+	int** tableAirs;  // матрица, которая хранит состояния текущего полета ЛА и взаимные режимы полета для двух ЛА
 
 public:
 	ORM(std::vector<Aircraft*> Aircrafts);
 	void checkAircrafts();
+	void checkZones();
 	void isLanding();
 
 };
