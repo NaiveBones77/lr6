@@ -373,8 +373,8 @@ void Aircraft::initRound(double R, double verticalShift)
 		PPMsRound.insert(PPMsRound.end(), point);
 		x -= dist;
 	}
-	PPMs.clear();
-	setPPMs(-1);
+	//PPMs.clear();
+	//setPPMs(-1);
 	mutex.unlock();
 }
 

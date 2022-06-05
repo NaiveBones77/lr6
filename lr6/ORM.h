@@ -23,6 +23,7 @@ public:
 	ORM(std::vector<Aircraft*> Aircrafts);
 	void checkAircrafts();
 	void checkZones();
+	void checkZones2();
 	void isLanding();
 
 };

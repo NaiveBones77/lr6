@@ -31,7 +31,7 @@ void test_check(ORM& A)
 
 void test_zones(ORM& A)
 {
-    A.checkZones();
+    A.checkZones2();
 }
 
 
@@ -125,8 +125,8 @@ int main()
 
     Transition tr;
 
-    std::vector<double> x01 = { -10000, 5000, 7000 };
-    std::vector<double> x02 = { -12204, 5000, -206 };
+    std::vector<double> x01 = { 11601, 5000, -3794 } ;
+    std::vector<double> x02 = { 12070, 5000, -1794 };
     std::vector<double> x03 = { -10000, 6000, 15000 };
     std::vector<double> x04 = { -8000, 3000, 9000 };
     std::vector<double> x05 = { 6000, 4000, 14000 };
@@ -136,7 +136,7 @@ int main()
     std::vector<std::vector<double>> glissade = tr.getGlissade(3000, 2);
 
     Aircraft* a1 = new Aircraft(x01, 200, 0, 1);
-    Aircraft* a2 = new Aircraft(x02, 400, 0, 2);
+    Aircraft* a2 = new Aircraft(x02, 300, 0, 2);
     Aircraft* a3 = new Aircraft(x03, 240, 0, 3);
     Aircraft* a4 = new Aircraft(x04, 250, 0, 4);
     Aircraft* a5 = new Aircraft(x05, 240, 0, 5);
@@ -189,7 +189,7 @@ int main()
     timer.add(std::chrono::microseconds(100), [&]() {test_ops(*a8); });
 
     timer.add(std::chrono::microseconds(10), [&]() {test_check(Orm); });
-    timer.add(std::chrono::microseconds(10), [&]() {test_zones(Orm); });
+    timer.add(std::chrono::microseconds(1000073), [&]() {test_zones(Orm); });
 
     // timer.add(std::chrono::microseconds(1500), [&]() {test_bomb(a1); });
 
